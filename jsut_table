@@ -1,0 +1,146 @@
+/*
+Total Table Number Is 10 on 06062023 -prson -gnnrl_cntct -comp_clnt -comp_agnt
+                                     -insur_typ -insur_trns -insur_pymnt -insur_polcy -insur_emp -insur_cas 
+					  WIll Add (Fleet , insur type names , )
+*/
+/*
+This table for person will play muilte key 
+Will contect ssn DATA for Person
+this Person Will linke with
+ Table :  -Toal Num is 8 FROM 10
+ 	      -Unique Constraints Column Is 
+*/
+/*
+should our ID keys be random or sequential?
+should our keys be 64 bits or larger? 
+			random
+			A random value is harder to do an enumeration type attack on.
+			randomness can be helpful to identify things uniquely.
+			sequential
+			Reasons for sequential keys
+			   sequential keys are faster to generate
+			   just need to increment a single field
+
+
+
+*/
+/* just client id and name */
+CREATE TABLE orgntr(
+   id INT GENERATED ALWAYS AS IDENTITY,
+   ssn INT NOT NULL PRIMARY KEY,/* not accept for INT(14) ? need to limit input for ssn number must be 14 only and number also*/
+   name VARCHAR(10) NOT NULL,
+   ssn_isu_dat DATE NOT NULL,
+   ssn_exp_dat DATE NOT NULL,
+   mirt_stst VARCHAR(50) NOT NULL,
+   gndr CHAR(1) NOT NULL, /* This will be selction*/
+   datFbrth DATE NOT NULL,
+   adrss VARCHAR(150),   
+   job_titl VARCHAR(50)
+);
+/* this table is comapny as client and this is week enitiy from clnt */
+create table comp_clnt (
+	id BIGINT NOT NULL,
+	agnt_sgl BIGSERIAL NOT NULL PRIMARY KEY,
+	agnt_tax VARCHAR(20) NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	adrs VARCHAR(50) NOT NULL,
+	fx_lin VARCHAR(50) NOT NULL, /* how to add multi mobile number ? */
+	lnd_lin VARCHAR(50) NOT NULL, /* how to add multi mobile number ? */
+	wbsit VARCHAR(50) NOT NULL,
+	contct_prson VARCHAR(50) NOT NULL,
+	eml VARCHAR(50)NOT NULL, /* how to add multi mobile number ? */
+	mob VARCHAR(50) NOT NULL /* how to add multi mobile number ? */
+);
+/* here we will try to make link from person table */
+create table clnt (
+	id INT GENERATED ALWAYS AS IDENTITY,
+    comp_clnt_id INT NOT NULL PRIMARY KEY,
+	comp_name VARCHAR(50) NOT NULL,
+	wrk_adrs VARCHAR(50) NOT NULL,
+	lnd_lin VARCHAR(50) NOT NULL,
+	wbsit VARCHAR(50) NOT NULL,
+	comp_eml VARCHAR(50) NOT NULL,
+	mob VARCHAR(50) NOT NULL,
+	comp_sgl VARCHAR(20) NOT NULL;
+	comp_tax VARCHAR(20) NOT NULL
+	CONSTRAINT fk_gnrl_conct
+      FOREIGN KEY(id) 
+	  REFERENCES gnrl_conct(id)
+	  ON DELETE SET NULL
+);
+/*
+Here I will add insur Type to the main to be linked wit insur policy 
+*/
+create table insur_typ (
+	id INT GENERATED ALWAYS AS IDENTITY,
+	name VARCHAR(50) NOT NULL PRIMARY KEY,
+	);
+/*
+
+/*
+This table for General contact information will play muilte key 
+Will contect ssn DATA for Person
+*/
+CREATE TABLE gnrl_conct(
+   id INT GENERATED ALWAYS AS IDENTITY,
+   prson_id INT NOT NULL PRIMARY KEY, /*modifay here : NOT NULL PRIMARY KEY, 06062023*/
+   mob VARCHAR(50) NOT NULL, /* how to add multi mobile number ? */
+   lnd_lin VARCHAR(50) NOT NULL, /* how to add multi mobile number ? */ 
+   wbsit VARCHAR(50) NOT NULL,
+   prmry_eml VARCHAR(50) NOT NULL,
+   contct_prson_emrg VARCHAR(50) NOT NULL,
+      CONSTRAINT fk_ssn
+      FOREIGN KEY(ssn) 
+	  REFERENCES prson(ssn)
+	  ON DELETE SET NULL
+);
+	
+/* here we will try to make link from company agent will deliver service to us table */
+
+/* here we will add dep table */
+create table jsur_dep (
+	id INT GENERATED ALWAYS AS IDENTITY,
+	name VARCHAR(50) NOT NULL PRIMARY KEY,
+);
+/*
+Here I will add employees to the main bridges data 
+*/
+create table jsur_emp (
+	id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name VARCHAR(50) NOT NULL,
+	job_titl VARCHAR(50) NOT NULL,
+	/* here will add 2 FOREIGN KEY this will do a reltion from person with dep and job title */
+	CONSTRAINT fk_gnrl_conct
+      FOREIGN KEY(id) 
+	  REFERENCES gnrl_conct(id)
+	  ON DELETE SET NULL
+);
+
+Here I will add insur All Type for insur policy form all compny , we will have 2 forign key is : case_id and Insur_type_id
+*/	
+create table insur_polcy (
+	id INT GENERATED ALWAYS AS IDENTITY,
+
+	name VARCHAR(50) NOT NULL PRIMARY KEY,
+	
+	);
+create table insur_trns (
+	id BIGINT NOT NULL,
+	sgl BIGSERIAL NOT NULL PRIMARY KEY,
+	name VARCHAR(50) NOT NULL
+	);
+
+create table insur_pymnt (
+	id BIGINT NOT NULL,
+	sgl BIGSERIAL NOT NULL PRIMARY KEY,
+	name VARCHAR(50) NOT NULL
+	);
+	
+create table insur_cas (
+	id BIGINT NOT NULL,
+	sgl BIGSERIAL NOT NULL PRIMARY KEY,
+	name VARCHAR(50) NOT NULL
+	);
+
+
+
