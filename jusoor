@@ -62,3 +62,15 @@ CREATE TABLE policy_appendices (
   value REAL NOT NULL,
   policies_id INTEGER NOT NULL REFERENCES policies(id)
 );
+
+CREATE TABLE claims (
+  id SERIAL PRIMARY KEY,
+  date_reported DATE NOT NULL,
+  date_of_loss DATE NOT NULL,
+  description TEXT NOT NULL,
+  amount REAL NOT NULL,
+  individual_customer_id INTEGER REFERENCES individual_customers(id),
+  corporate_customer_id INTEGER REFERENCES corporate_customers(id),
+  policy_id INTEGER NOT NULL REFERENCES policies(id)
+);
+
