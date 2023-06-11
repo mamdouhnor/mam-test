@@ -1,0 +1,64 @@
+CREATE TABLE individual_customers (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  address TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL
+);
+
+CREATE TABLE corporate_customers (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  address TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL,
+  contact_person_1 TEXT NOT NULL,
+  contact_person_2 TEXT NOT NULL,
+  contact_person_3 TEXT NOT NULL
+);
+
+CREATE TABLE insurance_companies (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  website TEXT NOT NULL,
+  headquarters TEXT NOT NULL
+);
+
+CREATE TABLE insurance_branches (
+   company_id INTEGER NOT NULL REFERENCES insurance_companies(id),
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  address TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL
+ );
+
+CREATE TABLE policy_types (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL
+);
+/* we must add here missing info needed also review data types in fields
+   need to add actions to remind sales and managers before policies end date around 15 day , and for large policies before 1 month
+*/
+CREATE TABLE policies (
+  id SERIAL PRIMARY KEY,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  premium REAL NOT NULL,
+  deductible REAL NOT NULL,
+  individual_customer_id INTEGER REFERENCES individual_customers(id),
+  corporate_customer_id INTEGER REFERENCES corporate_customers(id),
+  insurance_company_id INTEGER NOT NULL REFERENCES insurance_companies(id),
+  policy_type_id INTEGER NOT NULL REFERENCES policy_types(id),
+  insurance_branches_id INTEGER NOT NULL REFERENCES insurance_branches(id)
+  
+);
+
+CREATE TABLE policy_appendices (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  value REAL NOT NULL,
+  policies_id INTEGER NOT NULL REFERENCES policies(id)
+);
